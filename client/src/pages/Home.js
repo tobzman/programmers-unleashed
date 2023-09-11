@@ -1,8 +1,8 @@
 import React from "react";
 import { useQuery } from "@apollo/client";
 
-import NoteList from "../components/NoteList";
-import NoteForm from "../components/NoteForm";
+import ThoughtList from "../components/ThoughtList";
+import ThoughtForm from "../components/ThoughtForm";
 
 import { QUERY_THOUGHTS } from "../utils/queries";
 
@@ -17,7 +17,7 @@ const Home = () => {
           className="col-12 col-md-10 mb-3 p-3"
           style={{ border: "1px dotted #1a1a1a" }}
         >
-          <NoteForm />
+          <ThoughtForm />
         </div>
         <div className="col-12 col-md-8 mb-3">
           {loading ? (

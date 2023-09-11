@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 
 import { useQuery } from "@apollo/client";
-import { GET_ME } from "../utils/queries";
+import { QUERY_ME } from "../../utils/queries";
 
 import { Container, Card, Button, Row, Col } from "react-bootstrap";
-import { REMOVE_NOTE } from "../utils/mutations";
+import { REMOVE_NOTE } from "../../utils/mutations";
 import { useMutation } from "@apollo/client";
 
 const SavedNotes = () => {
@@ -15,7 +15,7 @@ const SavedNotes = () => {
     savedNotes: [],
   });
 
-  const { data } = useQuery(GET_ME, {
+  const { data } = useQuery(QUERY_ME, {
     onCompleted: () => {
       setUserData(data.me);
     },

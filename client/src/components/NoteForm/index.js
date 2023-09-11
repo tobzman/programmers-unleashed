@@ -33,15 +33,16 @@ const NoteForm = () => {
       event.stopPropagation();
     }
 
+    console.log(userFormData);
+
     try {
       const { data } = await addNote({
-        variables: { noteData: formattedData },
+        variables: { noteData: userFormData },
       });
 
       console.log(data);
     } catch (err) {
       console.error(err);
-      setShowAlert(true);
     }
 
     setUserFormData({
@@ -179,4 +180,4 @@ const NoteForm = () => {
   );
 };
 
-export default ThoughtForm;
+export default NoteForm;

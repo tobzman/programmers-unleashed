@@ -5,10 +5,12 @@ const { signToken } = require("../utils/auth");
 const resolvers = {
   Query: {
     users: async () => {
-      return User.find().populate("thoughts");
+      return User.find().populate("thoughts").populate("savedNotes");
     },
     user: async (parent, { username }) => {
-      return User.findOne({ username }).populate("thoughts");
+      return User.findOne({ username })
+        .populate("thoughts")
+        .populate("savedNotes");
     },
     thoughts: async (parent, { username }) => {
       const params = username ? { username } : {};
@@ -19,7 +21,9 @@ const resolvers = {
     },
     me: async (parent, args, context) => {
       if (context.user) {
-        return User.findOne({ _id: context.user._id }).populate("thoughts");
+        return User.findOne({ _id: context.user._id })
+          .populate("thoughts")
+          .populate("savedNotes");
       }
       throw new AuthenticationError("You need to be logged in!");
     },
@@ -119,6 +123,7 @@ const resolvers = {
       console.log("I am now in addNote.");
 
       if (context.user) {
+        console.log("context.user exists");
         const { title, medicine, startTime, period, numberOfTime, total } =
           noteData;
         const note = await Note.create({
