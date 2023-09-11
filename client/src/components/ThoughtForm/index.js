@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useMutation } from '@apollo/client';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { useMutation } from "@apollo/client";
 
-import { ADD_THOUGHT } from '../../utils/mutations';
-import { QUERY_THOUGHTS, QUERY_ME } from '../../utils/queries';
+import { ADD_THOUGHT, ADD_NOTE } from "../../utils/mutations";
+import { QUERY_THOUGHTS, QUERY_ME } from "../../utils/queries";
 
-import Auth from '../../utils/auth';
+import Auth from "../../utils/auth";
 
 const ThoughtForm = () => {
-  const [thoughtText, setThoughtText] = useState('');
+  const [thoughtText, setThoughtText] = useState("");
 
   const [characterCount, setCharacterCount] = useState(0);
 
@@ -34,6 +34,8 @@ const ThoughtForm = () => {
     },
   });
 
+  const [addNote, { error }] = useMutation(ADD_NOTE);
+
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
@@ -45,7 +47,7 @@ const ThoughtForm = () => {
         },
       });
 
-      setThoughtText('');
+      setThoughtText("");
     } catch (err) {
       console.error(err);
     }
@@ -54,7 +56,7 @@ const ThoughtForm = () => {
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    if (name === 'thoughtText' && value.length <= 280) {
+    if (name === "thoughtText" && value.length <= 280) {
       setThoughtText(value);
       setCharacterCount(value.length);
     }
@@ -68,7 +70,7 @@ const ThoughtForm = () => {
         <>
           <p
             className={`m-0 ${
-              characterCount === 280 || error ? 'text-danger' : ''
+              characterCount === 280 || error ? "text-danger" : ""
             }`}
           >
             Character Count: {characterCount}/280
@@ -83,7 +85,7 @@ const ThoughtForm = () => {
                 placeholder="Here's a new thought..."
                 value={thoughtText}
                 className="form-input w-100"
-                style={{ lineHeight: '1.5', resize: 'vertical' }}
+                style={{ lineHeight: "1.5", resize: "vertical" }}
                 onChange={handleChange}
               ></textarea>
             </div>
@@ -102,7 +104,7 @@ const ThoughtForm = () => {
         </>
       ) : (
         <p>
-          You need to be logged in to share your thoughts. Please{' '}
+          You need to be logged in to share your thoughts. Please{" "}
           <Link to="/login">login</Link> or <Link to="/signup">signup.</Link>
         </p>
       )}
