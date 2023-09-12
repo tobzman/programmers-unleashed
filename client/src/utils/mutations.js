@@ -31,10 +31,6 @@ export const ADD_THOUGHT = gql`
       thoughtText
       thoughtAuthor
       createdAt
-      comments {
-        _id
-        commentText
-      }
     }
   }
 `;
