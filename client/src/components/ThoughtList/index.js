@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Profile from '../../pages/Profile';
 
 const ThoughtList = ({
   thoughts,
@@ -13,7 +14,7 @@ const ThoughtList = ({
 
   return (
     <div>
-      {showTitle && <h3>{title}</h3>}
+      {showTitle && <h3>{Profile}</h3>}
       {thoughts &&
         thoughts.map((thought) => (
           <div key={thought._id} className="card mb-3">
