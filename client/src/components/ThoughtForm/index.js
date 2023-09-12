@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useMutation } from '@apollo/client';
+import { useMutation, gql } from '@apollo/client';
 
 import { ADD_THOUGHT } from '../../utils/mutations';
 import { QUERY_THOUGHTS, QUERY_ME } from '../../utils/queries';
@@ -9,10 +9,36 @@ import Auth from '../../utils/auth';
 
 const ThoughtForm = () => {
   const [thoughtText, setThoughtText] = useState('');
+  
+  // TODO create makeVar that holds ordered array of thoughts, then use that to map through them
 
   const [characterCount, setCharacterCount] = useState(0);
 
   const [addThought, { error }] = useMutation(ADD_THOUGHT, {
+    update( cache, { data: { addThought }}) {
+      cache.modify({
+        fields: {
+          thoughts(existingThoughts = []) {
+            const newThoughtRef = cache.writeFragment({
+              data: addThought,
+              fragment: gql`
+                fragment NewThought on Thought {
+                  _id
+                  thoughtText
+                  thoughtAuthor
+                }
+              `
+            });
+            return existingThoughts.concat(newThoughtRef);
+          }
+        }
+      });
+    }
+  });
+
+  // set addThought mutation to update cache with writeFragment
+  // set call to addThought to provide optimisticResponse
+  /*, {
     update(cache, { data: { addThought } }) {
       try {
         const { thoughts } = cache.readQuery({ query: QUERY_THOUGHTS });
@@ -32,10 +58,13 @@ const ThoughtForm = () => {
         data: { me: { ...me, thoughts: [...me.thoughts, addThought] } },
       });
     },
-  });
+  });*/
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
+
+    const date = Date(Date.now());
+    const dateId = date.toString();
 
     try {
       const { data } = await addThought({
@@ -43,8 +72,16 @@ const ThoughtForm = () => {
           thoughtText,
           thoughtAuthor: Auth.getProfile().data.username,
         },
+        optimisticResponse: {
+          addThought: {
+            _id: `temp-${dateId}`,
+            __typename: "Thought",
+            thoughtText: thoughtText,
+            thoughtAuthor: Auth.getProfile().data.username
+          }
+        }
       });
-
+      console.log(data);
       setThoughtText('');
     } catch (err) {
       console.error(err);
