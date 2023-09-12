@@ -8,9 +8,9 @@ import {
   ApolloProvider,
   createHttpLink,
 } from '@apollo/client';
+import { persistCache, LocalStorageWrapper } from 'apollo3-cache-persist';
 import { setContext } from '@apollo/client/link/context';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
+// pages and components
 import Home from './pages/Home';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
