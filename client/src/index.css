@@ -1741,8 +1741,13 @@ label form [type="radio"] {
   background-image: url(./images/Screenshot\ 2023-09-12\ at\ 19.37.00.png);
   background-position: center;
   background-size: cover;
+<<<<<<< HEAD
   top: -20%;
   right: 33%;
+=======
+  top: -20% ;
+  right:33%;
+>>>>>>> 1842bdea7a06ca6ffc9053a2c9eb311153f53dad
 }
 
 .loader::before,
@@ -1793,8 +1798,16 @@ label form [type="radio"] {
   }
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1842bdea7a06ca6ffc9053a2c9eb311153f53dad
 /* med list */
 
 ul.medication.list {
   display: flex;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1842bdea7a06ca6ffc9053a2c9eb311153f53dad

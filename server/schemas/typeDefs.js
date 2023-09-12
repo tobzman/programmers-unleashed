@@ -1,4 +1,4 @@
-const { gql } = require('apollo-server-express');
+const { gql } = require("apollo-server-express");
 
 const typeDefs = gql`
   type User {
@@ -7,6 +7,8 @@ const typeDefs = gql`
     email: String
     password: String
     thoughts: [Thought]!
+    savedNotes: [Note]!
+    noteCount: Int
   }
 
   type Thought {
@@ -15,6 +17,17 @@ const typeDefs = gql`
     thoughtAuthor: String
     createdAt: String
     comments: [Comment]!
+  }
+
+  type Note {
+    _id: ID!
+    title: String!
+    medicine: String!
+    startTime: String!
+    period: String!
+    numberOfTime: String!
+    total: String!
+    userId: String!
   }
 
   type Comment {
@@ -27,6 +40,15 @@ const typeDefs = gql`
   type Auth {
     token: ID!
     user: User
+  }
+
+  input NoteInput {
+    title: String!
+    medicine: String!
+    startTime: String!
+    period: String!
+    numberOfTime: String!
+    total: String!
   }
 
   type Query {
@@ -44,6 +66,8 @@ const typeDefs = gql`
     addComment(thoughtId: ID!, commentText: String!): Thought
     removeThought(thoughtId: ID!): Thought
     removeComment(thoughtId: ID!, commentId: ID!): Thought
+    addNote(noteData: NoteInput!): User
+    removeNote(noteId: ID!): User
   }
 `;
 

@@ -1,7 +1,7 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
-import Auth from '../../utils/auth';
+import Auth from "../../utils/auth";
 
 const Header = () => {
   const logout = (event) => {
@@ -13,13 +13,22 @@ const Header = () => {
       <div className="container flex-row justify-space-between-lg justify-center align-center">
         <div>
           <Link className="text-light" to="/">
-            <h1 className="m-0">Tech Thoughts</h1>
+            <h1 className="m-0">MediMate</h1>
           </Link>
-          <p className="m-0">Get into the mind of a programmer.</p>
+          <p className="m-0"> Your Medication, Your Time, Your Health!</p>
         </div>
         <div>
           {Auth.loggedIn() ? (
             <>
+              <Link className="btn btn-lg btn-info m-2" to="/me">
+                {Auth.getProfile().data.username}'s profile
+              </Link>
+              <Link className="btn btn-lg btn-info m-2" to="/add">
+                Add Note
+              </Link>
+              <Link className="btn btn-lg btn-info m-2" to="/notes">
+                See Notes
+              </Link>
               <Link className="btn btn-lg btn-info m-2" to="/me">
                 {Auth.getProfile().data.username}'s profile
               </Link>
