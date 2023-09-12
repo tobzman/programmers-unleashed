@@ -10,8 +10,6 @@ import Auth from '../../utils/auth';
 const ThoughtForm = () => {
 	const [thoughtText, setThoughtText] = useState('');
 
-	// TODO create makeVar that holds ordered array of thoughts, then use that to map through them
-
 	const [characterCount, setCharacterCount] = useState(0);
 
 	const [addThought, { error }] = useMutation(ADD_THOUGHT, {
@@ -40,24 +38,8 @@ const ThoughtForm = () => {
 		},
 	});
 
-	//   update(cache, { data: { addThought } }) {
-	//     try {
-	//       const { thoughts } = cache.readQuery({ query: QUERY_THOUGHTS });
-
-	//       cache.writeQuery({
-	//         query: QUERY_THOUGHTS,
-	//         data: { thoughts: [addThought, ...thoughts] },
-	//       });
-	//     } catch (e) {
-	//       console.error(e);
-	//     }
-	//   },
-	// });
-
-	// set addThought mutation to update cache with writeFragment
-	// set call to addThought to provide optimisticResponse
-
 	const handleFormSubmit = async (event) => {
+    // FIXME  handleFormSubmit not working offline.  
 		event.preventDefault();
 
 		const date = Date(Date.now());
@@ -69,7 +51,8 @@ const ThoughtForm = () => {
 					thoughtText,
 					thoughtAuthor: Auth.getProfile().data.username,
 				},
-				optimisticResponse: {
+				// not sure if this is required.  doesn't seem to be working while mutations not working in offline mode.
+        optimisticResponse: {
 					addThought: {
 						_id: `temp-${dateId}`,
 						__typename: 'Thought',
@@ -79,8 +62,6 @@ const ThoughtForm = () => {
 				},
 			});
 			console.log(data);
-			setThoughtText('');
-
 			setThoughtText('');
 		} catch (err) {
 			console.error(err);
