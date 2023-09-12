@@ -1,7 +1,10 @@
-import React from 'react';
-import { useQuery } from '@apollo/client';
+import React from "react";
+import { useQuery } from "@apollo/client";
 
-import { QUERY_THOUGHTS } from '../utils/queries';
+import ThoughtList from "../components/ThoughtList";
+import ThoughtForm from "../components/ThoughtForm";
+
+import { QUERY_THOUGHTS } from "../utils/queries";
 
 const MedicationReminder = () => {
   const { loading, data } = useQuery(QUERY_THOUGHTS);
@@ -9,6 +12,7 @@ const MedicationReminder = () => {
 
   return (
     <main>
+
       <header>
         <h1>Medication Reminder</h1>
       </header>
