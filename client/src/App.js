@@ -11,7 +11,7 @@ import {
 import { persistCache, LocalStorageWrapper } from "apollo3-cache-persist";
 import { setContext } from "@apollo/client/link/context";
 // pages and components
-import Home from "./pages/Home";
+import MedicationReminder from "./pages/MedicationReminder";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import SingleThought from "./pages/SingleThought";
@@ -23,6 +23,7 @@ import SavedNotes from "./components/SavedNotes";
 import logo from "./logo.svg";
 import "./App.css";
 import OneSignal from "react-onesignal";
+import Auth from "./utils/auth";
 
 // Construct our main GraphQL API endpoint
 const httpLink = createHttpLink({
@@ -64,13 +65,13 @@ function App() {
           <Header />
           <div className="container">
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={Auth.loggedIn() ? <MedicationReminder /> : <Signup />} />
+              <Route path="/medicationReminder" element={<MedicationReminder />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/me" element={<Profile />} />
               <Route path="/add" element={<NoteForm />} />
               <Route path="/notes" element={<SavedNotes />} />
-              <Route path="/profiles/:username" element={<Profile />} />
               <Route path="/thoughts/:thoughtId" element={<SingleThought />} />
             </Routes>
           </div>
