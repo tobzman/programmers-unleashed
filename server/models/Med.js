@@ -32,6 +32,7 @@ const medSchema = new Schema(
         }
       },
     ]
+    // TODO add icon
   }
 );
 

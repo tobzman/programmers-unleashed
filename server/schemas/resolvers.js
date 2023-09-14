@@ -23,13 +23,26 @@ const resolvers = {
 						_id: context.user._id,
 					}).populate('userMeds');
 					console.log(userData);
-          return userData;
+          			return userData;
 				} catch (err) {
 					console.error(err);
 				}
 			}
 			throw new AuthenticationError('You need to be logged in!');
 		},
+		meds: async (parent, args, context) => {
+			if (context.user) {
+				try {
+					const medsData = await Med.find({ userId: context.user._id}).populate('doses');
+					
+					console.log(medsData);
+          			return medsData;
+				} catch (err) {
+					console.error(err);
+				}
+			}
+			throw new AuthenticationError('You need to be logged in!');
+		  },
 	},
 
 	Mutation: {
