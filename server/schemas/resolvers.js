@@ -1,8 +1,13 @@
 const { AuthenticationError } = require("apollo-server-express");
 const { User, Thought, Note } = require("../models");
 const { signToken } = require("../utils/auth");
+const { DateScalar, TimeScalar, DateTimeScalar } = require('graphql-date-scalars');
 
 const resolvers = {
+  Date: DateScalar,
+  Time: TimeScalar,
+  DateTime: DateTimeScalar,
+
   Query: {
     users: async () => {
       return User.find().populate("thoughts").populate("savedNotes");

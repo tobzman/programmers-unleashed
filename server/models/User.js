@@ -43,6 +43,18 @@ const userSchema = new Schema(
           type: Boolean,
           required: true,
         },
+        doses: [
+          {
+            doseScheduled: {
+              type: Date,
+              required: true,
+            },
+            doseLogged: {
+              type: Date,
+              required: true
+            }
+          },
+        ]
       },
     ],
   },

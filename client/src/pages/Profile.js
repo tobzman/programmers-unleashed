@@ -41,7 +41,10 @@ const Profile = () => {
 					Viewing {userParam ? `${user.username}'s` : 'your'}{' '}
 					settings.
 				</h2>
+				{/* TODO move MedForm into modal that opens when push button to add new med */}
 				<MedForm />
+				{/* TODO Account Settings */}
+				{/* TODO cards that show current med settings so they can be edited */}
 			</div>
 		</div>
 	);
