@@ -1,5 +1,5 @@
 const { AuthenticationError } = require('apollo-server-express');
-const { User, Thought, Note, Med } = require('../models');
+const { User, Thought, Note, Med, Dose } = require('../models');
 const { signToken } = require('../utils/auth');
 const {
 	DateScalar,
@@ -23,26 +23,29 @@ const resolvers = {
 						_id: context.user._id,
 					}).populate('userMeds');
 					console.log(userData);
-          			return userData;
+					return userData;
 				} catch (err) {
 					console.error(err);
 				}
 			}
 			throw new AuthenticationError('You need to be logged in!');
 		},
-		meds: async (parent, args, context) => {
-			if (context.user) {
-				try {
-					const medsData = await Med.find({ userId: context.user._id}).populate('doses');
-					
-					console.log(medsData);
-          			return medsData;
-				} catch (err) {
-					console.error(err);
-				}
-			}
-			throw new AuthenticationError('You need to be logged in!');
-		  },
+		// TODO 
+		// meds: async (parent, args, context) => {
+		// 	if (context.user) {
+		// 		try {
+		// 			const medsData = await Med.find({
+		// 				userId: context.user._id,
+		// 			}).populate('doses');
+
+		// 			console.log(medsData);
+		// 			return medsData;
+		// 		} catch (err) {
+		// 			console.error(err);
+		// 		}
+		// 	}
+		// 	throw new AuthenticationError('You need to be logged in!');
+		// },
 	},
 
 	Mutation: {
@@ -70,13 +73,14 @@ const resolvers = {
 
 			return { token, user };
 		},
-    // WORKS
+		// WORKS
 		addMed: async (parent, { userId, medSettings }, context) => {
 			console.log('addMed resolver');
 			try {
 				const newMed = await Med.create({
-          userId: context.user._id, 
-          ...medSettings});
+					userId: context.user._id,
+					...medSettings,
+				});
 				console.log(newMed);
 
 				try {
@@ -98,26 +102,29 @@ const resolvers = {
 				throw new Error(err);
 			}
 		},
-		addDose: async (parent, { medId, doseScheduled, doseLogged }, context) => {
+		addDose: async (
+			parent,
+			{ medId, doseScheduled, doseLogged },
+			context
+		) => {
 			console.log('addDose resolver');
 			console.log({ medId, doseScheduled, doseLogged });
 			if (context.user) {
 				console.log('context.user exists');
 				try {
-					const newDose = await Med.findOneAndUpdate(
-						{ _id: medId},
-						{ $addToSet: { 
-							doses: 
-								{
-									doseScheduled: doseScheduled,
-									doseLogged: doseLogged,
-								},
-							},
-						},
-						{ new: true, runValidators: true }
-					);
-
+					const newDose = await Dose.create({
+						userId: context.user._id,
+						medId: medId,
+						doseScheduled: doseScheduled,
+						doseLogged: doseLogged,
+					});
 					console.log(newDose);
+					const updateMed = await Med.findOneAndUpdate(
+						{ _id: medId },
+						{ $addToSet: { doses: newDose._id } },
+						{ new: true }
+					).populate('doses');
+					console.log(updateMed);
 					return newDose;
 				} catch (err) {
 					throw new Error(err);

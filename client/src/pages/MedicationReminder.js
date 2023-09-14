@@ -32,18 +32,19 @@ const MedicationReminder = () => {
 							<div className="loader"></div>
 						</div>
 							{meds.map((med) => 
-								<Card>
+								<Card key={med._id}>
 									<Card.Title>
 										{med.medName}	
 									</Card.Title>
 									<Card.Body>
 										{/* TODO add med.icon properly */}
 										<span className="medication-icon">Icon 1</span>
-										<ul>
 											{med.doses.map((dose) => 
-												<li>Scheduled:{dose.doseScheduled} Logged:{dose.doseLogged}</li>
-											)}
+										<ul key={dose._id}>
+												<li>Scheduled:{dose.doseScheduled}</li>
+												<li>Logged:{dose.doseLogged}</li>
 										</ul>
+											)}
 									</Card.Body>
 								</Card>
 							)}

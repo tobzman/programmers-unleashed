@@ -22,11 +22,14 @@ const typeDefs = gql`
     maxDailyDoses: Int
     minTimeBetween: Int
     remindersBool: Boolean!
-    doses: [Dose]!
+    iconType: String
+    doses: [Dose]
   }
 
   type Dose {
     _id: ID!
+    userId: ID!
+    medId: ID!
     doseScheduled: DateTime
     doseLogged: DateTime
   }
@@ -82,6 +85,7 @@ const typeDefs = gql`
     user(username: String!): User
     me: User
     meds: [Med]
+    doses: [Dose]
     thoughts(username: String): [Thought]
     thought(thoughtId: ID!): Thought
     users: [User]
@@ -91,7 +95,7 @@ const typeDefs = gql`
     addUser(username: String!, email: String!, password: String!): Auth
     login(email: String!, password: String!): Auth
     addMed(userId: ID!, medSettings: MedInput!): Med
-    addDose(medId: ID!, doseScheduled: DateTime, doseLogged: DateTime): Med
+    addDose(medId: ID!, doseScheduled: DateTime, doseLogged: DateTime): Dose
     addThought(thoughtText: String!): Thought
     addComment(thoughtId: ID!, commentText: String!): Thought
     removeThought(thoughtId: ID!): Thought
