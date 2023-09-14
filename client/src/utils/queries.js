@@ -1,25 +1,18 @@
 import { gql } from "@apollo/client";
 
+// TODO remove one of query-user or query me.  They're the same thing.  Which to keep?
 export const QUERY_USER = gql`
   query user($username: String!) {
     user(username: $username) {
       _id
       username
       email
-      thoughts {
+      userMeds {
         _id
-        thoughtText
-        createdAt
-      }
-      savedNotes {
-        _id
-        title
-        medicine
-        startTime
-        period
-        numberOfTime
-        total
-        userId
+        medName
+        maxDailyDoses
+        minTimeBetween
+        remindersBool
       }
     }
   }

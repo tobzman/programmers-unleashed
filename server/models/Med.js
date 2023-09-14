@@ -8,17 +8,13 @@ const medSchema = new Schema(
       required: true,
     },
     maxDailyDoses: {
-      type: Int,
+      type: Number,
     },
     minTimeBetween: {
-      type: Int,
+      type: Number,
     },
     remindersBool: {
       type: Boolean,
-      required: true,
-    },
-    startTime: {
-      type: String,
       required: true,
     },
   },

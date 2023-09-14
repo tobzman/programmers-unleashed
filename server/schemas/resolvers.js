@@ -7,22 +7,10 @@ const resolvers = {
     users: async () => {
       return User.find().populate("thoughts").populate("savedNotes");
     },
-    user: async (parent, { username }) => {
-      return User.findOne({ username })
-        .populate("thoughts")
-        .populate("savedNotes");
-    },
-    thoughts: async (parent, { username }) => {
-      const params = username ? { username } : {};
-      return Thought.find(params).sort({ createdAt: -1 });
-    },
-    thought: async (parent, { thoughtId }) => {
-      return Thought.findOne({ _id: thoughtId });
-    },
     me: async (parent, args, context) => {
       if (context.user) {
         return User.findOne({ _id: context.user._id })
-          .populate("thoughts")
+          .populate("userMeds") // TODO: check if we need this if it's a subdocument of User
           .populate("savedNotes");
       }
       throw new AuthenticationError("You need to be logged in!");
@@ -52,73 +40,48 @@ const resolvers = {
 
       return { token, user };
     },
-    addThought: async (parent, { thoughtText }, context) => {
+    
+    addMed: async (parent, { medSettings }, context) => {
+      console.log("addMed resolver");
+
       if (context.user) {
-        const thought = await Thought.create({
-          thoughtText,
-          thoughtAuthor: context.user.username,
+        console.log("context.user exists");
+        console.log(medSettings);
+        try {
+          const updateUserWithMed = await User.findOneAndUpdate(
+            { _id: context.user._id },
+            { $addToSet: { userMeds: { ...medSettings }}},
+            { new: true, runValidators: true }
+          );
+          
+          console.log(updateUserWithMed);
+          return updateUserWithMed;
+        } catch (err) {
+          throw new Error(err);
+        }
+      }
+      throw new AuthenticationError("You need to be logged in!");
+    },
+    removeNote: async (parent, { noteId }, context) => {
+      if (context.user) {
+        const note = await Note.findOneAndDelete({
+          _id: noteId,
+          userId: context.user._id,
         });
 
-        await User.findOneAndUpdate(
+        const user = await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $addToSet: { thoughts: thought._id } }
-        );
-
-        return thought;
-      }
-      throw new AuthenticationError("You need to be logged in!");
-    },
-    addComment: async (parent, { thoughtId, commentText }, context) => {
-      if (context.user) {
-        return Thought.findOneAndUpdate(
-          { _id: thoughtId },
-          {
-            $addToSet: {
-              comments: { commentText, commentAuthor: context.user.username },
-            },
-          },
-          {
-            new: true,
-            runValidators: true,
-          }
-        );
-      }
-      throw new AuthenticationError("You need to be logged in!");
-    },
-    removeThought: async (parent, { thoughtId }, context) => {
-      if (context.user) {
-        const thought = await Thought.findOneAndDelete({
-          _id: thoughtId,
-          thoughtAuthor: context.user.username,
-        });
-
-        await User.findOneAndUpdate(
-          { _id: context.user._id },
-          { $pull: { thoughts: thought._id } }
-        );
-
-        return thought;
-      }
-      throw new AuthenticationError("You need to be logged in!");
-    },
-    removeComment: async (parent, { thoughtId, commentId }, context) => {
-      if (context.user) {
-        return Thought.findOneAndUpdate(
-          { _id: thoughtId },
           {
             $pull: {
-              comments: {
-                _id: commentId,
-                commentAuthor: context.user.username,
-              },
+              savedNotes: note._id,
             },
-          },
-          { new: true }
+          }
         );
+
+        return user;
       }
       throw new AuthenticationError("You need to be logged in!");
     },
-
     addNote: async (parent, { noteData }, context) => {
       console.log("I am now in addNote.");
 
