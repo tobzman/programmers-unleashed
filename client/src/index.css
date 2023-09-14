@@ -366,7 +366,11 @@ body {
   font-size: 16px;
   color: #1a1a1a;
 }
+/* Toby Login page images*/
+.image-placeholder{
+  background-image: url(./images/front\ screenshot.gif);
 
+}
 h1,
 h2,
 h3,
@@ -1731,8 +1735,8 @@ label form [type="radio"] {
   background-image: url(./images/Screenshot\ 2023-09-12\ at\ 19.37.00.png);
   background-position: center;
   background-size: cover;
-  top: -20% ;
-  right:33%;
+  top: -20%;
+  right: 33%;
 }
 
 .loader::before,
@@ -1783,10 +1787,8 @@ label form [type="radio"] {
   }
 }
 
-
 /* med list */
 
 ul.medication.list {
   display: flex;
 }
-
