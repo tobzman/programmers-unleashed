@@ -3,24 +3,25 @@ import { Link } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 
 import { ADD_NOTE } from "../../utils/mutations";
+import { ADD_MED } from '../../utils/mutations';
 
 import Auth from "../../utils/auth";
 
+import { Container, Row, Col, Button, Form } from 'react-bootstrap';
+
 const MedForm = () => {
-  const [userFormData, setUserFormData] = useState({
-    title: "",
-    medicine: "",
-    startTime: "",
-    period: "",
-    numberOfTime: "",
-    total: "",
+  const [medFormData, setMedFormData] = useState({
+    medName: "",
+    maxDailyDoses: 0,
+    minTimeBetween: 4,
+    remindersBool: true,
   });
 
-  const [addNote, { error, data }] = useMutation(ADD_NOTE);
+  const [addMed] = useMutation(ADD_MED);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setUserFormData({ ...userFormData, [name]: value });
+    setMedFormData({ ...medFormData, [name]: value });
   };
 
   const handleFormSubmit = async (event) => {
@@ -33,149 +34,84 @@ const MedForm = () => {
       event.stopPropagation();
     }
 
-    console.log(userFormData);
+    console.log(medFormData);
 
     try {
-      const { data } = await addNote({
-        variables: { noteData: userFormData },
+      const { data } = await addMed({
+        variables: { medSettings: medFormData },
       });
 
+      console.log('med added');
       console.log(data);
     } catch (err) {
       console.error(err);
     }
 
-    setUserFormData({
-      title: "",
-      medicine: "",
-      startTime: "",
-      period: "",
-      numberOfTime: "",
-      total: "",
+    setMedFormData({
+      medName: "",
+      maxDailyDoses: 0,
+      minTimeBetween: 4,
+      remindersBool: true,
     });
   };
 
   return (
     <div>
       <h3>What's your medication?</h3>
-
-      {Auth.loggedIn() ? (
-        <>
-          <form className="container">
-            <div className="row input-group-lg m-4">
-              <div>
-                <label for="titleInput" class="form-label">
-                  Title
-                </label>
-              </div>
-              <input
-                name="title"
-                id="titleInput"
-                value={userFormData.title}
-                onChange={handleChange}
-                type="text"
-                class="form-control"
-                placeholder="Enter your title"
-              ></input>
-            </div>
-            <div className="row input-group-lg m-4">
-              <div>
-                <label for="medicineInput" class="form-label">
-                  Medicine
-                </label>
-              </div>
-              <input
-                name="medicine"
-                id="medicineInput"
-                value={userFormData.medicine}
-                onChange={handleChange}
-                type="text"
-                class="form-control"
-                placeholder="Enter your medicine"
-              ></input>
-            </div>
-            <div className="row input-group-lg m-4">
-              <div>
-                <label for="startTimeInput" class="form-label">
-                  Start time
-                </label>
-              </div>
-              <input
-                name="startTime"
-                id="startTimeInput"
-                value={userFormData.startTime}
-                onChange={handleChange}
-                type="text"
-                class="form-control"
-                placeholder="Enter your start time"
-              ></input>
-            </div>
-
-            <div className="row input-group-lg m-4">
-              <div>
-                <label for="periodInput" class="form-label">
-                  Period
-                </label>
-              </div>
-              <input
-                name="period"
-                id="periodInput"
-                value={userFormData.period}
-                onChange={handleChange}
-                type="text"
-                class="form-control"
-                placeholder="Enter your period"
-              ></input>
-            </div>
-            <div className="row input-group-lg m-4">
-              <div>
-                <label for="numberOfTimeInput" class="form-label">
-                  Number of doses per day
-                </label>
-              </div>
-              <input
-                name="numberOfTime"
-                id="numberOfTimeInput"
-                value={userFormData.numberOfTime}
-                onChange={handleChange}
-                type="text"
-                class="form-control"
-                placeholder="Enter your number of doses per day"
-              ></input>
-            </div>
-            <div className="row input-group-lg m-4">
-              <div>
-                <label for="totalInput" class="form-label">
-                  Total number of doses
-                </label>
-              </div>
-              <input
-                name="total"
-                id="totalInput"
-                value={userFormData.total}
-                onChange={handleChange}
-                type="text"
-                class="form-control"
-                placeholder="Enter your total number of doses"
-              ></input>
-            </div>
-            <div className="row m-4">
-              <button
-                type="button"
-                className="btn btn-outline-primary btn-lg"
-                onClick={handleFormSubmit}
-              >
-                Submit
-              </button>
-            </div>
-          </form>
-        </>
-      ) : (
-        <p>
-          You need to be logged in to share your thoughts. Please{" "}
-          <Link to="/login">login</Link> or <Link to="/signup">signup.</Link>
-        </p>
-      )}
+    
+      <Container>
+        <Form>
+          <Form.Group>
+            <Form.Label>
+              Medication Name
+            </Form.Label>
+            <Form.Control 
+              type="text" 
+              name="medName"
+              id="medName-input"
+              value={medFormData.medName}
+              onChange={handleChange}
+              placeholder="Enter the medication name" />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>
+              Maximum doses per day
+            </Form.Label>
+            <Form.Control 
+              type="number" 
+              name="maxDailyDoses"
+              id="maxDailyDoses-input"
+              value={medFormData.maxDailyDoses}
+              onChange={handleChange}
+              placeholder="0" />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>
+              Minimum time allowed between doses
+            </Form.Label>
+            <Form.Control 
+              type="number" 
+              name="minTimeBetween"
+              id="minTimeBetween-input"
+              value={medFormData.minTimeBetween}
+              onChange={handleChange}
+              placeholder="4" />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>
+              Would you like reminders for this medication?
+            </Form.Label>
+            <Form.Check 
+              type="switch" 
+              name="remindersBool"
+              id="remindersBool-input"
+              value={medFormData.remindersBool}
+              onChange={handleChange}
+              label="Reminders" />
+          </Form.Group>
+          <Button type="sumbit" onClick={handleFormSubmit}>Add Medication</Button>
+        </Form>
+      </Container>
     </div>
   );
 };

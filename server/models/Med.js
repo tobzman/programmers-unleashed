@@ -6,6 +6,7 @@ const medSchema = new Schema(
     medName: {
       type: String,
       required: true,
+      unique: true,
     },
     maxDailyDoses: {
       type: Number,

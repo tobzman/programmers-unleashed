@@ -9,9 +9,7 @@ const resolvers = {
     },
     me: async (parent, args, context) => {
       if (context.user) {
-        return User.findOne({ _id: context.user._id })
-          .populate("userMeds") // TODO: check if we need this if it's a subdocument of User
-          .populate("savedNotes");
+        return User.findOne({ _id: context.user._id });
       }
       throw new AuthenticationError("You need to be logged in!");
     },
@@ -50,7 +48,9 @@ const resolvers = {
         try {
           const updateUserWithMed = await User.findOneAndUpdate(
             { _id: context.user._id },
-            { $addToSet: { userMeds: { ...medSettings }}},
+            { $addToSet: { 
+              userMeds: medSettings
+            }},
             { new: true, runValidators: true }
           );
           

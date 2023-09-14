@@ -25,11 +25,13 @@ export const ADD_USER = gql`
 `;
 
 export const ADD_MED = gql`
-  mutation addMed($medSettings: MedInput!) {
+  mutation AddMed($medSettings: MedInput!) {
     addMed(medSettings: $medSettings) {
       _id
       username
       email
+      password
+      noteCount
       userMeds {
         _id
         medName

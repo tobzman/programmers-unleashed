@@ -28,8 +28,21 @@ const userSchema = new Schema(
     ],
     userMeds: [
       {
-        type: Schema.Types.ObjectId,
-        ref: "Med",
+        medName: {
+          type: String,
+          unique: true,
+          required: true,
+        },
+        maxDailyDoses: {
+          type: Number,
+        },
+        minTimeBetween: {
+          type: Number,
+        },
+        remindersBool: {
+          type: Boolean,
+          required: true,
+        },
       },
     ],
   },
