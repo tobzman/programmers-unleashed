@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import { useQuery } from '@apollo/client';
-import { QUERY_THOUGHTS } from '../utils/queries';
+import { QUERY_ME, QUERY_THOUGHTS } from '../utils/queries';
 
 import Calendar from 'react-calendar';
 import { Container, Row, Col } from 'react-bootstrap';
-import ThoughtList from '../components/ThoughtList';
-import ThoughtForm from '../components/ThoughtForm';
 
 import 'react-calendar/dist/Calendar.css';
 
 const MedicationReminder = () => {
-	const { loading, data } = useQuery(QUERY_THOUGHTS);
-	const thoughts = data?.thoughts || [];
+	const { data: thoughtData } = useQuery(QUERY_THOUGHTS);
+	const { loading, data: userData } = useQuery(QUERY_ME);
+	const thoughts = thoughtData?.thoughts || [];
 	const [calendarValue, setCalendarValue] = useState(new Date());
+
+	console.log(userData);
 
 	function onChangeCalendar(nextValue) {
 		setCalendarValue(nextValue);

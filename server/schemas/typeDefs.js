@@ -18,10 +18,18 @@ const typeDefs = gql`
 
   type Med {
     _id: ID
+    userId: ID
     medName: String!
     maxDailyDoses: Int
     minTimeBetween: Int
     remindersBool: Boolean!
+    doses: [Dose]!
+  }
+
+  type Dose {
+    _id: ID!
+    doseScheduled: DateTime
+    doseLogged: DateTime
   }
 
   type Thought {
@@ -72,17 +80,19 @@ const typeDefs = gql`
   }
 
   type Query {
-    users: [User]
     user(username: String!): User
+    me: User
+    meds(username: String!): [Med]
     thoughts(username: String): [Thought]
     thought(thoughtId: ID!): Thought
-    me: User
+    users: [User]
   }
 
   type Mutation {
     addUser(username: String!, email: String!, password: String!): Auth
     login(email: String!, password: String!): Auth
-    addMed(medSettings: MedInput!): User
+    addMed(userId: ID!, medSettings: MedInput!): Med
+    addDose(medId: ID!, doseScheduled: DateTime, doseLogged: DateTime): Med
     addThought(thoughtText: String!): Thought
     addComment(thoughtId: ID!, commentText: String!): Thought
     removeThought(thoughtId: ID!): Thought
