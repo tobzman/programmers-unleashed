@@ -12,9 +12,9 @@ const MedicationReminder = () => {
 
   return (
     <main>
-
+    <div className="card">
       <header>
-        <h1>Medication Reminder</h1>
+        <h1 className="rem">Medication Reminder</h1>
       </header>
       <div class="loader-container">
   <div class="loader"></div>
@@ -30,13 +30,14 @@ const MedicationReminder = () => {
               Medication Type 2
               <span className="medication-icon">Icon 2</span>
             </li>
-            <li>
+            <li> 
               Medication Type 3
               <span className="medication-icon">Icon 3</span>
             </li>
             {/* Add more medication types and icons as needed */}
           </ul>
         </div>
+        <div className="card2">
         <div className="right-column">
           <div className="calendar">
             {/* Add calendar component here */}
@@ -47,6 +48,8 @@ const MedicationReminder = () => {
             {/* Example: <ReminderComponent /> */}
           </div>
         </div>
+      </div>
+      </div>
       </div>
     </main>
   );
