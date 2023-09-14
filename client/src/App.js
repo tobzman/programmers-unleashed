@@ -10,6 +10,9 @@ import {
 } from "@apollo/client";
 import { persistCache, LocalStorageWrapper } from "apollo3-cache-persist";
 import { setContext } from "@apollo/client/link/context";
+// utilities
+import OneSignal from "react-onesignal";
+import Auth from "./utils/auth";
 // pages and components
 import MedicationReminder from "./pages/MedicationReminder";
 import Signup from "./pages/Signup";
@@ -20,10 +23,10 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import NoteForm from "./components/NoteForm";
 import SavedNotes from "./components/SavedNotes";
+// styling
 import logo from "./logo.svg";
+import 'bootstrap/dist/css/bootstrap.css';
 import "./App.css";
-import OneSignal from "react-onesignal";
-import Auth from "./utils/auth";
 
 // Construct our main GraphQL API endpoint
 const httpLink = createHttpLink({

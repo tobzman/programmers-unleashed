@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useQuery } from '@apollo/client';
-import Calendar from 'react-calendar';
+import { QUERY_THOUGHTS } from '../utils/queries';
 
+import Calendar from 'react-calendar';
 import ThoughtList from '../components/ThoughtList';
 import ThoughtForm from '../components/ThoughtForm';
 
-import { QUERY_THOUGHTS } from '../utils/queries';
+import 'react-calendar/dist/Calendar.css';
 
 const MedicationReminder = () => {
 	const { loading, data } = useQuery(QUERY_THOUGHTS);
